@@ -38,7 +38,7 @@ const empty = (input) => {
 
 const generateUserToken = (id) => {
     const token = jsonwebtoken.sign({
-        user_id: id,
+        idPengguna: id,
     }, secretOrPublicKey)
     return token
 }

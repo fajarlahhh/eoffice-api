@@ -6,6 +6,7 @@ const {
 } = require('../helpers/status')
 const {
     isEmpty,
+    empty,
 } = require('../helpers/validations');
 
 const all = async (req, res) => {
@@ -13,8 +14,13 @@ const all = async (req, res) => {
         jabatan
     } = req.body
 
+    if (empty(jabatan)) {
+        errorMessage.data = 'jabatan tidak boleh kosong';
+        return res.status(status.bad).send(errorMessage);
+    }
+
     try {
-        await db.query('SELECT * FROM disposisi di LEFT JOIN dokumen do ON di.id_dokumen=do.id WHERE di.status=0' + (isEmpty(jabatan)? '': ' AND tujuan=? ', [
+        await mysql.query('SELECT * FROM disposisi di LEFT JOIN dokumen do ON di.id_dokumen=do.id WHERE di.status=0 AND tujuan=?', [
             jabatan
         ], (error, result) =>{
             if (error) {
@@ -23,7 +29,7 @@ const all = async (req, res) => {
             }
             successMessage.data = result;
             return res.status(status.success).json(successMessage);
-        }))
+        })
     } catch (error) {
         errorMessage.data = error.message;
         return res.status(status.error).json(errorMessage);

@@ -16,9 +16,9 @@ module.exports = async (req, res, next) => {
     }
 
     try {
-        const decode = jsonwebtoken.verify(token, secretOrPublicKey)
+        const decoded = jsonwebtoken.verify(token, secretOrPublicKey)
         req.user = {
-            user_id: id,
+            idPengguna: decoded.idPengguna,
         }
         next()
     } catch (error) {
